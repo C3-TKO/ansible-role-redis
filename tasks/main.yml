@@ -1,0 +1,17 @@
+---
+- name: Update apt cache.
+  apt:
+    update_cache: yes
+    cache_valid_time: 86400
+  changed_when: false
+- name: Ensure redis is installed.
+  apt:
+    name: redis-server
+    state: installed
+  notify: restart redis
+- name: Allow connections within local network
+  ufw:
+    proto: tcp
+    port: 6379
+    rule: allow
+    src: 192.168.125.0/24
